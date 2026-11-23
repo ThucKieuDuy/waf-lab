@@ -1,5 +1,5 @@
 # 🛡️ BÁO CÁO KỸ THUẬT & THỰC HÀNH AN TOÀN THÔNG TIN
-# WAF DEVSECOPS LAB & SOC AUTOMATED DEFENSE PLATFORM
+# WAF HOME LAB & SOC MONITORING
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-ThucKieuDuy%2Fwaf--lab-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ThucKieuDuy/waf-lab.git)
 [![Docker](https://img.shields.io/badge/Docker-Compose_v2-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
@@ -10,45 +10,45 @@
 
 ---
 
-## 📋 THÔNG TIN BÁO CÁO THỰC TẬP / ĐỒ ÁN
-* **Đề tài:** Xây dựng Hệ thống Phòng thủ Ứng dụng Web (WAF), Tự động hóa Phản ứng Sự cố (SOAR) và Giám sát An ninh (SOC) trên Môi trường DevSecOps.
-* **Người thực hiện:** Kiều Duy Thức ([@ThucKieuDuy](https://github.com/ThucKieuDuy))
+## 📋 THÔNG TIN BÁO CÁO NHÓM
+* **Đề tài:** Xây dựng mô hình Home Lab phòng thủ ứng dụng Web (WAF), tự động hóa cảnh báo/phản ứng sự cố (SOAR) và giám sát an ninh (SOC) trên môi trường Docker.
+* **Nhóm thực hiện:** Nhóm 7 (Repository duy trì bởi Kiều Duy Thức - [@ThucKieuDuy](https://github.com/ThucKieuDuy))
 * **Repository:** [https://github.com/ThucKieuDuy/waf-lab.git](https://github.com/ThucKieuDuy/waf-lab.git)
-* **Vị trí định hướng:** Security Engineer / SOC Analyst / DevSecOps Engineer
 
 ---
 
 ## 📑 MỤC LỤC
-1. [TỔNG QUAN DỰ ÁN (TÔI ĐANG LÀM GÌ & ĐÃ HỌC ĐƯỢC GÌ)](#1-tổng-quan-dự-án-tôi-đang-làm-gì--đã-học-được-gì)
+1. [TỔNG QUAN DỰ ÁN](#1-tổng-quan-dự-án)
 2. [KIẾN TRÚC HỆ THỐNG & HẠ TẦNG CONTAINER](#2-kiến-trúc-hệ-thống--hạ-tầng-container)
 3. [CHI TIẾT CÁC THÀNH PHẦN & KỊCH BẢN THỰC NGHIỆM](#3-chi-tiết-các-thành-phần--kịch-bản-thực-nghiệm)
-8. [HƯỚNG DẪN CÀI ĐẶT & XỬ LÝ SỰ CỐ (TROUBLESHOOTING)](#8-hướng-dẫn-cài-đặt--xử-lý-sự-cố-troubleshooting)
+4. [HƯỚNG DẪN CÀI ĐẶT & XỬ LÝ SỰ CỐ (TROUBLESHOOTING)](#8-hướng-dẫn-cài-đặt--xử-lý-sự-cố-troubleshooting)
+5. [DEMO HỆ THỐNG THỰC TẾ](#-demo-hệ-thống-thực-tế)
 
 ---
 
 ## 1. TỔNG QUAN DỰ ÁN
 
 ### 1.1. Mục tiêu dự án
-Dự án này là môi trường phòng lab thực nghiệm an toàn thông tin toàn diện, mô phỏng hạ tầng phòng thủ thực tế tại doanh nghiệp nhằm giải quyết 3 bài toán trọng tâm:
-1. **Bảo vệ ứng dụng web (Perimeter Defense):** Triển khai WAF ModSecurity v3 kết hợp bộ luật quốc tế OWASP Core Rule Set (CRS v3.3) để ngăn chặn các cuộc tấn công web phổ biến (SQL Injection, XSS, RCE, LFI/RFI).
-2. **Chủ động phản ứng tự động (SOAR - Active Defense):** Xây dựng bot phản ứng 2 chiều qua Telegram kết hợp Docker Socket, giúp chuyên viên SOC có thể tra cứu và **chặn đứng IP kẻ tấn công chỉ với 1 chạm (1-click)**, giảm thời gian xử lý sự cố (MTTR) từ hàng chục phút xuống **< 1.5 giây**.
-3. **Giám sát thời gian thực & Kiểm thử tự động (SOC & DevSecOps):** Xây dựng SOC Dashboard sử dụng cơ chế **SQLite WAL Mode** (độ trễ truy vấn < 1ms) và bộ công cụ **WAF Scanner** đánh giá tỷ lệ bảo vệ tự động với tiêu chuẩn Quality Gate ($\ge 90\%$).
+Dự án này là một mô hình **Home Lab** thực hành an toàn thông tin, mô phỏng thu nhỏ cơ chế phòng thủ ứng dụng web nhằm giúp nhóm nghiên cứu và giải quyết 3 bài toán trọng tâm:
+1. **Bảo vệ ứng dụng web (Perimeter Defense):** Triển khai WAF ModSecurity v3 kết hợp bộ luật OWASP Core Rule Set (CRS v3.3) để ngăn chặn các cuộc tấn công web phổ biến (SQL Injection, XSS, RCE, LFI/RFI).
+2. **Chủ động phản ứng tự động (SOAR - Active Defense):** Xây dựng bot phản ứng 2 chiều qua Telegram kết hợp Docker Socket, hỗ trợ tra cứu và **chặn đứng IP tấn công chỉ với 1 chạm (1-click)**, giúp rút ngắn thời gian xử lý sự cố (MTTR) xuống **< 1.5 giây**.
+3. **Giám sát thời gian thực & Kiểm thử tự động (SOC & DevSecOps):** Xây dựng SOC Dashboard sử dụng cơ chế **SQLite WAL Mode** (độ trễ truy vấn < 1ms) và công cụ **WAF Scanner** đánh giá tỷ lệ bảo vệ tự động với tiêu chuẩn Quality Gate ($\ge 90\%$).
 
-### 1.2. Thu hoạch & Kỹ năng đạt được
+### 1.2. Kết quả & Kiến thức nhóm đạt được
 * **Kiến thức WAF & OWASP CRS chuyên sâu:**
-  * Hiểu bản chất cơ chế chấm điểm bất thường liên hoàn (**Collaborative Anomaly Scoring**) khác biệt hoàn toàn với phương pháp so khớp từ khóa (Regex Signature) truyền thống.
-  * Nắm vững cách cấu hình **Paranoia Levels (Level 2)** để cân bằng tối ưu giữa việc chặn đứng kỹ thuật né tránh (Evasion/Obfuscation) và hạn chế báo động giả (False Positive).
+  * Hiểu bản chất cơ chế chấm điểm bất thường liên hoàn (**Collaborative Anomaly Scoring**) khác biệt với phương pháp so khớp từ khóa (Regex Signature) truyền thống.
+  * Nắm vững cách cấu hình **Paranoia Levels (Level 2)** để cân bằng giữa việc chặn đứng kỹ thuật né tránh (Evasion/Obfuscation) và hạn chế báo động giả (False Positive).
   * Thành thạo bóc tách và phân tích các Section trong file ModSecurity Audit Log JSON (Transaction ID, Rule ID, Inbound Score).
 * **Tư duy Blue Team & Vận hành SOC/SOAR:**
   * Chuyển dịch từ tư duy phòng thủ thụ động (chỉ ghi log) sang phòng thủ chủ động (tự động hóa cách ly IP tại tầng Nginx sơ cấp).
-  * Giải quyết bài toán quá tải cảnh báo (**Alert Fatigue**) bằng cách xây dựng thuật toán điều tiết tốc độ (Rate Limiting) và cơ chế **Flood Shield** tự động gộp bản tin khi bị tấn công dồn dập.
+  * Giải quyết bài toán quá tải cảnh báo (**Alert Fatigue**) bằng thuật toán điều tiết tốc độ (Rate Limiting) và cơ chế **Flood Shield** tự động gộp bản tin khi bị tấn công dồn dập.
 * **Kỹ năng Kỹ thuật Hệ thống & Tối ưu hóa (System Engineering):**
-  * Làm chủ lập trình bất đồng bộ (`asyncio`) với mô hình 4 workers chạy song song trên một Event Loop duy nhất mà không gây nghẽn tiến trình.
-  * Tối ưu hóa I/O Database với **SQLite WAL Mode** (Write-Ahead Logging), loại bỏ hoàn toàn hiện tượng khóa file (Database Lock) khi vừa ghi vừa đọc dữ liệu tốc độ cao.
-  * Ứng dụng kỹ thuật **Streaming Generator** trong Python để nạp hàng chục nghìn payload từ điển mà mức chiếm dụng RAM xấp xỉ bằng 0.
+  * Ứng dụng lập trình bất đồng bộ (`asyncio`) với mô hình 4 workers chạy song song trên một Event Loop duy nhất mà không gây nghẽn tiến trình.
+  * Tối ưu hóa I/O Database với **SQLite WAL Mode** (Write-Ahead Logging), loại bỏ hiện tượng khóa file (Database Lock) khi vừa ghi vừa đọc dữ liệu tốc độ cao.
+  * Ứng dụng kỹ thuật **Streaming Generator** trong Python để nạp hàng chục nghìn payload từ điển với mức chiếm dụng RAM tối thiểu.
 * **Tư duy DevSecOps & Tự vệ hệ thống (Self-Defense):**
-  * Tích hợp kiểm thử bảo mật tự động vào chu trình phát triển (Shift-Left Security), đặt điều kiện Quality Gate rõ ràng trước khi triển khai sản phẩm.
-  * Chủ động phòng chống tấn công ngược vào chính hệ thống quản trị: lọc IP dải RFC1918 chống **Self-DoS** (chặn nhầm Gateway) và kiểm định Regex chống **Command Injection**.
+  * Tích hợp kiểm thử bảo mật tự động vào quy trình triển khai (Shift-Left Security), đặt điều kiện Quality Gate rõ ràng.
+  * Chủ động phòng chống tấn công ngược vào hệ thống quản trị: lọc IP dải RFC1918 chống **Self-DoS** (chặn nhầm Gateway) và kiểm định Regex chống **Command Injection**.
 
 ---
 
