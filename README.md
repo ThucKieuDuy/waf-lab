@@ -167,3 +167,17 @@ docker compose up -d --build
 | **Bot Telegram không gửi tin nhắn** | `TELEGRAM_BOT_TOKEN` hoặc `CHAT_ID` chưa đúng | Kiểm tra lại token với `@BotFather`, gửi tin nhắn mồi cho Bot rồi lấy Chat ID qua API `getUpdates` |
 | **Dashboard không nhảy số sự kiện** | File database chưa được cấp quyền ghi | Kiểm tra log daemon: `docker compose logs -f log_parser` và đảm bảo thư mục `./logs` có quyền ghi |
 | **Quét WAF Scanner gây quá tải CPU** | Số luồng quét mặc định quá cao so với cấu hình máy | Giảm worker và tăng độ trễ: `python3 waf_scanner.py --workers=4 --delay=0.05` |
+
+---
+
+## 🎬 DEMO HỆ THỐNG THỰC TẾ
+
+[![Demo WAF DevSecOps Lab & SOC](https://img.youtube.com/vi/dY953W_r94o/maxresdefault.jpg)](https://www.youtube.com/watch?v=dY953W_r94o)
+
+👉 **Link video:** [Xem Demo trên YouTube (LAB-WAF)](https://www.youtube.com/watch?v=dY953W_r94o)
+
+### 📌 Nội dung chính trong Video Demo
+* **[00:00:01] – Tổng quan & Kiến trúc hệ thống:** Giới thiệu mô hình 5 container Docker (`waf_proxy`, Web Target, MySQL, Log Parser, SOC Dashboard), cơ chế tính điểm bất thường (*Collaborative Anomaly Scoring*) và chu trình xử lý sự kiện khép kín.
+* **[00:08:00] – Giao diện SOC Dashboard:** Trình diễn theo dõi lưu lượng thời gian thực trên cổng `5001` (tổng số request, tỷ lệ chặn/bypass, bảng thống kê Rule ID kích hoạt và nhật ký sự kiện).
+* **[00:09:00] – Kịch bản 1 (Paranoia Level 2):** Chạy công cụ **WAF Scanner** tấn công tự động bằng các payload SQL Injection & XSS. Hệ thống WAF chặn đứng hoàn toàn các request độc hại (đạt tỷ lệ bảo vệ **100%**).
+* **[00:10:34] – Kịch bản 2 (So sánh với Paranoia Level 1):** Hạ cấu hình xuống mức mặc định (`Paranoia Level 1`) để kiểm chứng sự đánh đổi giữa hiệu năng/độ mượt và bảo mật — minh họa thực tế payload SQL Injection vượt qua WAF (*bypass*) và đăng nhập trái phép thành công.
