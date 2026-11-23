@@ -26,15 +26,15 @@
 
 ---
 
-## 1. TỔNG QUAN DỰ ÁN (TÔI ĐANG LÀM GÌ & ĐÃ HỌC ĐƯỢC GÌ)
+## 1. TỔNG QUAN DỰ ÁN
 
-### 1.1. Tôi đang làm gì? (Mục tiêu dự án)
+### 1.1. Mục tiêu dự án
 Dự án này là môi trường phòng lab thực nghiệm an toàn thông tin toàn diện, mô phỏng hạ tầng phòng thủ thực tế tại doanh nghiệp nhằm giải quyết 3 bài toán trọng tâm:
 1. **Bảo vệ ứng dụng web (Perimeter Defense):** Triển khai WAF ModSecurity v3 kết hợp bộ luật quốc tế OWASP Core Rule Set (CRS v3.3) để ngăn chặn các cuộc tấn công web phổ biến (SQL Injection, XSS, RCE, LFI/RFI).
 2. **Chủ động phản ứng tự động (SOAR - Active Defense):** Xây dựng bot phản ứng 2 chiều qua Telegram kết hợp Docker Socket, giúp chuyên viên SOC có thể tra cứu và **chặn đứng IP kẻ tấn công chỉ với 1 chạm (1-click)**, giảm thời gian xử lý sự cố (MTTR) từ hàng chục phút xuống **< 1.5 giây**.
 3. **Giám sát thời gian thực & Kiểm thử tự động (SOC & DevSecOps):** Xây dựng SOC Dashboard sử dụng cơ chế **SQLite WAL Mode** (độ trễ truy vấn < 1ms) và bộ công cụ **WAF Scanner** đánh giá tỷ lệ bảo vệ tự động với tiêu chuẩn Quality Gate ($\ge 90\%$).
 
-### 1.2. Tôi đã học được gì từ quá trình này? (Thu hoạch & Kỹ năng đạt được)
+### 1.2. Thu hoạch & Kỹ năng đạt được
 * **Kiến thức WAF & OWASP CRS chuyên sâu:**
   * Hiểu bản chất cơ chế chấm điểm bất thường liên hoàn (**Collaborative Anomaly Scoring**) khác biệt hoàn toàn với phương pháp so khớp từ khóa (Regex Signature) truyền thống.
   * Nắm vững cách cấu hình **Paranoia Levels (Level 2)** để cân bằng tối ưu giữa việc chặn đứng kỹ thuật né tránh (Evasion/Obfuscation) và hạn chế báo động giả (False Positive).
