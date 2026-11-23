@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# SQLite and Database files
+*.db
+*.db-wal
+*.db-shm
+logs/*.db
+logs/*.db-wal
+logs/*.db-shm
+
+# Log files
+logs/*.log
+*.log
+
+# Caches and temporary files
+.cache/
+reports/
+*.html.tmp
+
+# Backup files
+*.bak
+*.swp
+*~
+*.mov
+*.mp4

@@ -1,0 +1,103 @@
+services:
+  waf_mysql_db:
+    image: mysql:8.0
+    container_name: waf_mysql_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${DB_NAME:-vulnerable_db}
+    networks:
+      waf_net:
+        ipv4_address: 172.20.0.4
+
+  web_target:
+    build: .
+    container_name: web_target
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - waf_mysql_db
+    networks:
+      waf_net:
+        ipv4_address: 172.20.0.2
+
+  waf_proxy:
+    image: owasp/modsecurity-crs:nginx
+    container_name: waf_proxy
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    environment:
+      - PARANOIA=2
+      - BLOCKING_PARANOIA=2
+      - ANOMALY_INBOUND=5
+      - ANOMALY_OUTBOUND=4
+      - MODSEC_RULE_ENGINE=On
+    volumes:
+      - ./default.conf:/etc/nginx/templates/conf.d/default.conf.template
+      - ./modsecurity-override.conf:/etc/nginx/templates/modsecurity.d/modsecurity-override.conf.template
+      - ./logs:/var/log/modsecurity
+      - ./nginx_conf/block.conf:/etc/nginx/conf.d/block.conf
+    depends_on:
+      - web_target
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s http://localhost:80/ > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      waf_net:
+        ipv4_address: 172.20.0.3
+
+  soc_dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: soc_dashboard
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./app.py:/app/app.py
+      - ./logs:/app/logs
+      - ./nginx_conf:/app/nginx_conf
+    depends_on:
+      waf_proxy:
+        condition: service_healthy
+    networks:
+      waf_net:
+        ipv4_address: 172.20.0.5
+
+  log_parser:
+    build:
+      context: .
+      dockerfile: Dockerfile.log_parser
+    container_name: log_parser
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./log_parser.py:/app/log_parser.py
+      - ./logs:/app/logs
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./nginx_conf:/app/nginx_conf
+    depends_on:
+      waf_proxy:
+        condition: service_healthy
+    networks:
+      waf_net:
+        ipv4_address: 172.20.0.6
+
+networks:
+  waf_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

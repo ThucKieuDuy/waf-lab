@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env
+*.docx
+__pycache__/
+venv/
+reports/
+logs/
+custom_testcases/
+payload_*.txt
+README.md
+waf_scanner.py
+*.db*
+*.sh
+.cache/
+

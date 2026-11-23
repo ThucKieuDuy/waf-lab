@@ -1,0 +1,54 @@
+name: WAF Benchmark Automated Quality Gate
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  waf_benchmark:
+    name: WAF Benchmark Test & Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout Mã Nguồn
+        uses: actions/checkout@v4
+
+      - name: 2. Thiết lập Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: 3. Khởi tạo Thư mục Chứa Báo cáo
+        run: |
+          mkdir -p reports
+          chmod -R 777 reports
+
+      - name: 4. Triển khai Hạ tầng WAF Lab
+        run: |
+          echo "=== [DEPLOY] KHỞI ĐỘNG CÁC CONTAINER WAF LAB ==="
+          docker compose up -d --build
+          
+          echo "=== [HEALTHCHECK] CHỜ WAF PROXY SẴN SÀNG (PORT 80) ==="
+          timeout 60s bash -c 'until curl -s -f http://localhost:80 > /dev/null 2>&1 || [ $(curl -s -o /dev/null -w "%{http_code}" http://localhost:80) -eq 200 ]; do echo "Đang đợi Nginx WAF..."; sleep 3; done'
+          echo "WAF Proxy đã sẵn sàng tiếp nhận traffic!"
+
+      - name: 5. Thực thi Kiểm thử WAF Duy nhất (waf_scanner.py)
+        run: |
+          echo "=== [BENCHMARK] BẮN TẢI TỪ ĐIỂN PAYLOADS VÀO WAF PROXY ==="
+          python3 waf_scanner.py
+
+      - name: 6. Lưu trữ Báo cáo Artifacts (Bypass Report)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: waf-bypass-reports
+          path: reports/
+          retention-days: 14
+
+      - name: 7. Dọn dẹp Hạ tầng Container
+        if: always()
+        run: |
+          echo "=== [CLEANUP] DỪNG VÀ XÓA CÁC CONTAINER EPHEMERAL ==="
+          docker compose down -v

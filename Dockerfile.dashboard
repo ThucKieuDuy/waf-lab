@@ -1,0 +1,16 @@
+FROM python:3.10-slim
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Cài đặt thư viện Flask cho SOC Dashboard
+RUN pip install --no-cache-dir flask>=3.0.0
+
+# Copy source code app.py vào container
+COPY app.py /app/app.py
+
+# Mở cổng 5000 cho Web SOC
+EXPOSE 5000
+
+CMD ["python", "app.py"]
