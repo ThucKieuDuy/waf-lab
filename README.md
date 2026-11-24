@@ -171,9 +171,9 @@ docker compose up -d --build
 
 ## 🎬 DEMO HỆ THỐNG THỰC TẾ
 
-[![Demo WAF Home Lab & SOC](https://img.youtube.com/vi/dY953W_r94o/maxresdefault.jpg)](https://www.youtube.com/watch?v=dY953W_r94o)
+[![Demo WAF Home Lab & SOC](https://img.youtube.com/vi/qKGiJ2solG0/maxresdefault.jpg)](https://youtu.be/qKGiJ2solG0)
 
-👉 **Link video:** [Xem Demo trên YouTube (LAB-WAF)](https://www.youtube.com/watch?v=dY953W_r94o)
+👉 **Link video:** [Xem Demo trên YouTube (LAB-WAF)](https://youtu.be/qKGiJ2solG0)
 
 ### 📌 Nội dung chính trong Video Demo
 * **[00:00:01] – Tổng quan & Kiến trúc hệ thống:** Giới thiệu mô hình 5 container Docker (`waf_proxy`, Web Target, MySQL, Log Parser, SOC Dashboard), cơ chế tính điểm bất thường (*Collaborative Anomaly Scoring*) và chu trình xử lý sự kiện khép kín.
