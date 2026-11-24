@@ -1,5 +1,4 @@
-# 🛡️ BÁO CÁO KỸ THUẬT & THỰC HÀNH AN TOÀN THÔNG TIN
-# WAF HOME LAB & SOC MONITORING
+# 🛡️ BÁO CÁO KỸ THUẬT & THỰC HÀNH AN TOÀN THÔNG TIN: WAF HOME LAB & SOC MONITORING
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-ThucKieuDuy%2Fwaf--lab-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ThucKieuDuy/waf-lab.git)
 [![Docker](https://img.shields.io/badge/Docker-Compose_v2-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
@@ -12,7 +11,7 @@
 
 ## 📋 THÔNG TIN BÁO CÁO NHÓM
 * **Đề tài:** Xây dựng mô hình Home Lab phòng thủ ứng dụng Web (WAF), tự động hóa cảnh báo/phản ứng sự cố (SOAR) và giám sát an ninh (SOC) trên môi trường Docker.
-* **Nhóm thực hiện:** Nhóm 7 (Repository duy trì bởi Kiều Duy Thức - [@ThucKieuDuy](https://github.com/ThucKieuDuy))
+* **Nhóm thực hiện:** Nhóm 7 (Repository duy trì bởi Kiều Duy Thực - [@ThucKieuDuy](https://github.com/ThucKieuDuy))
 * **Repository:** [https://github.com/ThucKieuDuy/waf-lab.git](https://github.com/ThucKieuDuy/waf-lab.git)
 
 ---
@@ -21,7 +20,7 @@
 1. [TỔNG QUAN DỰ ÁN](#1-tổng-quan-dự-án)
 2. [KIẾN TRÚC HỆ THỐNG & HẠ TẦNG CONTAINER](#2-kiến-trúc-hệ-thống--hạ-tầng-container)
 3. [CHI TIẾT CÁC THÀNH PHẦN & KỊCH BẢN THỰC NGHIỆM](#3-chi-tiết-các-thành-phần--kịch-bản-thực-nghiệm)
-4. [HƯỚNG DẪN CÀI ĐẶT & XỬ LÝ SỰ CỐ (TROUBLESHOOTING)](#8-hướng-dẫn-cài-đặt--xử-lý-sự-cố-troubleshooting)
+4. [HƯỚNG DẪN CÀI ĐẶT & XỬ LÝ SỰ CỐ (TROUBLESHOOTING)](#4-hướng-dẫn-cài-đặt--xử-lý-sự-cố-troubleshooting)
 5. [DEMO HỆ THỐNG THỰC TẾ](#-demo-hệ-thống-thực-tế)
 
 ---
@@ -32,12 +31,12 @@
 Dự án này là một mô hình **Home Lab** thực hành an toàn thông tin, mô phỏng thu nhỏ cơ chế phòng thủ ứng dụng web nhằm giúp nhóm nghiên cứu và giải quyết 3 bài toán trọng tâm:
 1. **Bảo vệ ứng dụng web (Perimeter Defense):** Triển khai WAF ModSecurity v3 kết hợp bộ luật OWASP Core Rule Set (CRS v3.3) để ngăn chặn các cuộc tấn công web phổ biến (SQL Injection, XSS, RCE, LFI/RFI).
 2. **Chủ động phản ứng tự động (SOAR - Active Defense):** Xây dựng bot phản ứng 2 chiều qua Telegram kết hợp Docker Socket, hỗ trợ tra cứu và **chặn đứng IP tấn công chỉ với 1 chạm (1-click)**, giúp rút ngắn thời gian xử lý sự cố (MTTR) xuống **< 1.5 giây**.
-3. **Giám sát thời gian thực & Kiểm thử tự động (SOC & DevSecOps):** Xây dựng SOC Dashboard sử dụng cơ chế **SQLite WAL Mode** (độ trễ truy vấn < 1ms) và công cụ **WAF Scanner** đánh giá tỷ lệ bảo vệ tự động với tiêu chuẩn Quality Gate ($\ge 90\%$).
+3. **Giám sát thời gian thực & Kiểm thử tự động (SOC & DevSecOps):** Xây dựng SOC Dashboard sử dụng cơ chế **SQLite WAL Mode** (độ trễ truy vấn < 1ms) và công cụ **WAF Scanner** đánh giá tỷ lệ bảo vệ tự động với tiêu chuẩn Quality Gate (**≥ 90%**).
 
 ### 1.2. Kết quả & Kiến thức nhóm đạt được
 * **Kiến thức WAF & OWASP CRS chuyên sâu:**
   * Hiểu bản chất cơ chế chấm điểm bất thường liên hoàn (**Collaborative Anomaly Scoring**) khác biệt với phương pháp so khớp từ khóa (Regex Signature) truyền thống.
-  * Nắm vững cách cấu hình **Paranoia Levels (Level 2)** để cân bằng giữa việc chặn đứng kỹ thuật né tránh (Evasion/Obfuscation) và hạn chế báo động giả (False Positive).
+  * Nắm vững cách cấu hình **Paranoia Level 2** để cân bằng giữa việc chặn đứng kỹ thuật né tránh (Evasion/Obfuscation) và hạn chế báo động giả (False Positive).
   * Thành thạo bóc tách và phân tích các Section trong file ModSecurity Audit Log JSON (Transaction ID, Rule ID, Inbound Score).
 * **Tư duy Blue Team & Vận hành SOC/SOAR:**
   * Chuyển dịch từ tư duy phòng thủ thụ động (chỉ ghi log) sang phòng thủ chủ động (tự động hóa cách ly IP tại tầng Nginx sơ cấp).
@@ -56,7 +55,7 @@ Dự án này là một mô hình **Home Lab** thực hành an toàn thông tin,
 
 Toàn bộ hệ thống được container hóa và cô lập trong subnet mạng Bridge `waf_net` (`172.20.0.0/16`). Chỉ có WAF Proxy (Port 80) và SOC Dashboard (Port 5001) được public ra ngoài máy host.
 
-```
+```text
                           [ INTERNET / ATTACKER TRAFFIC ]
                                          │
                     ┌────────────────────┴────────────────────┐
@@ -99,14 +98,14 @@ Toàn bộ hệ thống được container hóa và cô lập trong subnet mạn
 | **Daemon & SOAR Bot** | Python 3.10 Asyncio + Docker Socket | Bóc tách log JSON theo thời gian thực, gửi cảnh báo Telegram và tự động cập nhật `block.conf` |
 | **Cơ sở dữ liệu SOC** | SQLite 3 (Chế độ WAL Mode) | Lưu trữ tập trung các sự kiện tấn công, hỗ trợ ghi batch và đọc đồng thời độ trễ cực thấp |
 | **SOC Dashboard** | Flask Framework + TailwindCSS | Giao diện giám sát trực quan Dark Mode, cung cấp RESTful APIs quản trị cho SOC Analyst |
-| **WAF Scanner** | 100% Python Standard Library | Công cụ bắn tải kiểm thử tự động, đánh giá tỷ lệ bảo vệ Quality Gate ($\ge 90\%$) |
+| **WAF Scanner** | 100% Python Standard Library | Công cụ bắn tải kiểm thử tự động, đánh giá tỷ lệ bảo vệ Quality Gate (≥ 90%) |
 
 ---
 
 ## 3. CHI TIẾT CÁC THÀNH PHẦN & KỊCH BẢN THỰC NGHIỆM
 
 ### 3.1. Phân tích các thành phần chính
-* **Cơ chế Anomaly Scoring (ModSecurity):** Thiết lập `PARANOIA=2`, `ANOMALY_INBOUND=5`. Mỗi vi phạm được chấm điểm theo trọng số. Khi tổng điểm $\ge 5$, Rule ID `949110` sẽ kích hoạt và trả mã `403 Forbidden`.
+* **Cơ chế Anomaly Scoring (ModSecurity):** Thiết lập `PARANOIA=2`, `ANOMALY_INBOUND=5`. Mỗi vi phạm được chấm điểm theo trọng số. Khi tổng điểm ≥ 5, Rule ID `949110` sẽ kích hoạt và trả mã `403 Forbidden`.
 * **Cơ chế Chặn IP Động (SOAR):** Khi chuyên viên nhấn `[🚫 Chặn IP]` trên Telegram, daemon kiểm tra tính hợp lệ của IP, chèn dòng `deny <IP>;` vào `nginx_conf/block.conf` và nạp lại Nginx qua Docker Socket. Mọi gói tin từ IP này sau đó bị Nginx ngắt ngay tại tầng TCP/HTTP đầu tiên, tiết kiệm tài nguyên hệ thống.
 * **Tối ưu hóa SQLite WAL Engine:** Áp dụng `PRAGMA journal_mode = WAL;` và `PRAGMA synchronous = NORMAL;`, cho phép Dashboard truy vấn aggregated data dưới **0.2ms** mà không làm khóa tiến trình ghi log.
 
@@ -118,7 +117,7 @@ Toàn bộ hệ thống được container hóa và cô lập trong subnet mạn
    * *Thao tác:* Gửi request `curl -X POST http://localhost/comments.php -d 'content=<script>alert("XSS")</script>'`.
    * *Kết quả:* WAF kích hoạt Rule ID `941100`, chặn đứng payload không cho lưu vào CSDL MySQL.
 3. **Kịch bản 3 - Phản ứng sự cố SOAR 2 chiều (Chặn & Mở khóa IP):**
-   * *Thao tác:* Nhận cảnh báo tấn công từ IP `203.0.113.88` trên Telegram $\rightarrow$ Nhấn nút `[🚫 Chặn IP]`.
+   * *Thao tác:* Nhận cảnh báo tấn công từ IP `203.0.113.88` trên Telegram → Nhấn nút `[🚫 Chặn IP]`.
    * *Kết quả:* File `block.conf` tự động thêm `deny 203.0.113.88;`, Nginx reload lập tức. Nút bấm trên Telegram tự đổi sang `[🟢 Mở khóa (Unban)]` cho phép phục hồi quyền truy cập bất kỳ lúc nào.
 4. **Kịch bản 4 - Tra cứu Threat Intel nội bộ:**
    * *Thao tác:* Nhấn nút `[🔍 Info IP]` trên Telegram.
@@ -128,7 +127,7 @@ Toàn bộ hệ thống được container hóa và cô lập trong subnet mạn
    * *Kết quả:* Hệ thống từ chối lệnh chặn mạng nội bộ (chống **Self-DoS**) và Regex lọc sạch chuỗi độc hại (chống **Command Injection**).
 6. **Kịch bản 6 - Bắn tải WAF Scanner & Đánh giá Quality Gate:**
    * *Thao tác:* Chạy lệnh `python3 waf_scanner.py --limit=50`.
-   * *Kết quả:* Hệ thống kích hoạt **Flood Shield** chống nghẽn Telegram; tỷ lệ phòng vệ đạt **96.2%**, vượt tiêu chuẩn Quality Gate ($\ge 90\%$).
+   * *Kết quả:* Hệ thống kích hoạt **Flood Shield** chống nghẽn Telegram; tỷ lệ phòng vệ đạt **96.2%**, vượt tiêu chuẩn Quality Gate (≥ 90%).
 7. **Kịch bản 7 - Dọn dẹp & Reset môi trường (`reset_traffic.sh`):**
    * *Thao tác:* Chạy lệnh `./reset_traffic.sh`.
    * *Kết quả:* Tự động làm sạch log, dọn bảng SQLite (`VACUUM`), xóa IP trong `block.conf` và khôi phục database về trạng thái ban đầu trong 3 giây.
@@ -140,7 +139,7 @@ Toàn bộ hệ thống được container hóa và cô lập trong subnet mạn
 ### 4.1. Hướng dẫn khởi chạy nhanh (3 bước)
 ```bash
 # Bước 1: Clone kho mã nguồn dự án
-git clone https://github.com/ThucKieuDuy/waf-lab.git
+git clone [https://github.com/ThucKieuDuy/waf-lab.git](https://github.com/ThucKieuDuy/waf-lab.git)
 cd waf-lab
 
 # Bước 2: Thiết lập cấu hình biến môi trường
@@ -172,7 +171,7 @@ docker compose up -d --build
 
 ## 🎬 DEMO HỆ THỐNG THỰC TẾ
 
-[![Demo WAF DevSecOps Lab & SOC](https://img.youtube.com/vi/dY953W_r94o/maxresdefault.jpg)](https://www.youtube.com/watch?v=dY953W_r94o)
+[![Demo WAF Home Lab & SOC](https://img.youtube.com/vi/dY953W_r94o/maxresdefault.jpg)](https://www.youtube.com/watch?v=dY953W_r94o)
 
 👉 **Link video:** [Xem Demo trên YouTube (LAB-WAF)](https://www.youtube.com/watch?v=dY953W_r94o)
 
